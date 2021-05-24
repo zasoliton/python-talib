@@ -8,9 +8,11 @@ RUN mkdir /install
 WORKDIR /install
 
 # Build TA-Lib Core
+# For ARM https://mikestaszel.com/2021/01/23/install-ta-lib-on-m1/
 RUN wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz \
     && tar -xvzf ta-lib-0.4.0-src.tar.gz \
     && cd ta-lib/ \
+    && cp /usr/share/automake-1.16/config.guess . \
     && ./configure --prefix=/usr \
     && make \
     && make install \
@@ -43,6 +45,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /build/ta-lib
+
 
 RUN cd ta-lib \
     && make install
