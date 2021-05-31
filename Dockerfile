@@ -4,11 +4,11 @@ ARG DEBIAN_VERSION=buster
 FROM python:${PYTHON_VERSION}-${DEBIAN_VERSION} AS builder
 ENV PYTHONUNBUFFERED 1
 
-RUN mkdir /install
+RUN mkdir -p /out/packages
+RUN mkdir -p /out/wheels
 WORKDIR /install
 
 ARG DEBIAN_VERSION
-ARG TARGETARCH
 
 RUN echo deb http://deb.debian.org/debian ${DEBIAN_VERSION}-backports main >> /etc/apt/sources.list.d/sources.list
 
@@ -28,12 +28,17 @@ RUN wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz \
 # Build Python Wheel Packages
 COPY ./requirements.txt /wheels/requirements.txt
 
+WORKDIR /out/wheels
+
 RUN pip install -U pip \
    && pip wheel -r /wheels/requirements.txt
+
+
 
 # Release Build
 FROM python:${PYTHON_VERSION}-slim-${DEBIAN_VERSION}
 
+ARG TARGETARCH
 
 COPY --from=builder /out /install
 
