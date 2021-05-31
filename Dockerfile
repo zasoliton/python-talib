@@ -17,11 +17,11 @@ RUN apt update && apt install checkinstall
 # Build TA-Lib Core
 RUN wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz \
     && tar -xvzf ta-lib-0.4.0-src.tar.gz \
-    && pushd ta-lib/ \
+    && cd ta-lib/ \
     && cp /usr/share/automake-1.16/config.guess . \
     && ./configure --prefix=/usr \
     && checkinstall -y --pakdir=/out/packages \
-    && popd \
+    && cd .. \
     && rm -R ta-lib-0.4.0-src.tar.gz \
     && rm -R ta-lib
 
