@@ -1,7 +1,7 @@
 ARG PYTHON_VERSION=3.8.9
 ARG DEBIAN_VERSION=buster
 
-FROM python:${PYTHON_VERSION}-${DEBIAN_VERSION} AS builder
+FROM python:${PYTHON_VERSION}-slim-${DEBIAN_VERSION} AS builder
 ENV PYTHONUNBUFFERED 1
 
 RUN mkdir -p /out/packages
@@ -12,7 +12,7 @@ ARG DEBIAN_VERSION
 
 RUN echo deb http://deb.debian.org/debian ${DEBIAN_VERSION}-backports main >> /etc/apt/sources.list.d/sources.list
 
-RUN apt update && apt install checkinstall
+RUN apt update && apt install -y checkinstall build-essential wget automake
 
 # Build TA-Lib Core
 RUN wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz \
